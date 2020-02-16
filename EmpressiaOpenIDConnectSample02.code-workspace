@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "EmpressiaOpenIDConnectSample02"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}

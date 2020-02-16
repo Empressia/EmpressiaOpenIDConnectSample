@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>認証Providerの選択</title>
+		<link rel="stylesheet" href="/assets/honoka-4.3.1/css/bootstrap.min.css" />
+		<script src="/assets/honoka-4.3.1/js/bootstrap.min.js"></script>
+		<style>
+			.IssuerLink {
+				margin: 6px 0px;
+				text-align: left;
+			}
+		</style>
+		<script>
+			function selectIssuer(issuer) {
+				location.href = "/api/auth/MultipleIssuers/issuerSelected" + "?" + "Issuer" + "=" + encodeURIComponent(issuer);
+			}
+		</script>
+	</head>
+	<body>
+		<div>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="ml-auto col-width-content mr-auto">
+						<div>
+							<button onclick="javascript:selectIssuer('https://accounts.google.com');" class="IssuerLink btn btn-block btn-lg btn-outline-primary">
+								<span><span>Google</span><span>のアカウントでログイン</span></span>
+							</button>
+						</div>
+						<div>
+							<button onclick="javascript:selectIssuer('https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0');" class="IssuerLink btn btn-block btn-lg btn-outline-primary">
+								<span><span>Microsoft</span><span>のアカウントでログイン</span></span>
+							</button>
+						</div>
+						<div>
+							<button onclick="javascript:selectIssuer('https://access.line.me');" class="IssuerLink btn btn-block btn-lg btn-outline-primary">
+								<span><span>LINE</span><span>のアカウントでログイン</span></span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

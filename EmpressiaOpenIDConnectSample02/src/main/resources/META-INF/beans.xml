@@ -1,0 +1,12 @@
+<beans>
+	<alternatives>
+		<class>jp.empressia.enterprise.security.oidc.GoogleAuthenticationMechanism$Settings</class>
+		<class>jp.empressia.enterprise.security.oidc.LINEAuthenticationMechanism$Settings</class>
+		<class>jp.empressia.enterprise.security.oidc.MicrosoftAuthenticationMechanism$Settings</class>
+		<class>jp.empressia.enterprise.security.oidc.PublicKeyHelper</class>
+		<class>jp.empressia.enterprise.security.oidc.OpenIDConnectRememberMeIdentityStore$TokenCache</class>
+		<class>jp.empressia.enterprise.security.oidc.MultipleIssuersOpenIDConnectAuthenticationMechanism$Settings</class>
+		<class>jp.empressia.enterprise.security.oidc.MultipleIssuersOpenIDConnectAuthenticationMechanism$RedirectedIssurSelector</class>
+		<class>jp.empressia.enterprise.security.oidc.MultipleIssuersOpenIDConnectAuthenticationMechanism$RedirectIssuerNotSelectedHandler</class>
+	</alternatives>
+</beans>

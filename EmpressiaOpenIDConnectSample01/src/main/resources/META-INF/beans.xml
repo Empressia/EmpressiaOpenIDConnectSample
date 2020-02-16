@@ -1,0 +1,7 @@
+<beans>
+	<alternatives>
+		<class>jp.empressia.enterprise.security.oidc.MicrosoftAuthenticationMechanism$Settings</class>
+		<class>jp.empressia.enterprise.security.oidc.PublicKeyHelper</class>
+		<class>jp.empressia.enterprise.security.oidc.OpenIDConnectRememberMeIdentityStore$TokenCache</class>
+	</alternatives>
+</beans>
