@@ -103,6 +103,17 @@ public class UserAccessor {
 		return token;
 	}
 
+	/**
+	 * ユーザーのトークンを返します。
+	 * 新しい順に返します。最新が先頭です。
+	 */
+	public List<Token> queryTokens(User user) {
+		var query = this.em.createQuery("SELECT t FROM Token t WHERE t.User = ?1 ORDER BY t.CreatedAt DESC", Token.class);
+		query = query.setParameter(1, user);
+		List<Token> tokens = query.getResultList();
+		return tokens;
+	}
+
 	public void flush() {
 		this.em.flush();
 	}

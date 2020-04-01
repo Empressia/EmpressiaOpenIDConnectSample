@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -61,6 +62,7 @@ public class UserAuthorization implements Serializable {
 	public void setExpiresIn(int ExpiresIn) { this.ExpiresIn = ExpiresIn; }
 
 	/** CreatedAt。 */
+	@Basic(optional=false)
 	private LocalDateTime CreatedAt;
 	/** CreatedAt。 */
 	public LocalDateTime getCreatedAt() { return this.CreatedAt; }
@@ -138,6 +140,13 @@ public class UserAuthorization implements Serializable {
 			return true;
 		}
 
+	}
+
+	/** 引数の主キー以外を適用します。 */
+	public void merge(UserAuthorization other) {
+		this.RefreshToken = other.RefreshToken;
+		this.ExpiresIn = other.ExpiresIn;
+		this.CreatedAt = other.CreatedAt;
 	}
 
 }

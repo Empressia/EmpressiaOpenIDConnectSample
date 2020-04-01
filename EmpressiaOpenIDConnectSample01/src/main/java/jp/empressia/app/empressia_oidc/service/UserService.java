@@ -1,6 +1,8 @@
 package jp.empressia.app.empressia_oidc.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -23,8 +25,7 @@ public class UserService {
 
 	private UserAccessor UserAccessor;
 
-	/** トークンを再発行する間隔です。これを経過したら適当なときに再発行します。 */
-	private int TokenReissueInterval;
+	private int MaxTokenCount = 10;
 
 	@Inject
 	public UserService(
@@ -32,7 +33,6 @@ public class UserService {
 		@ConfigProperty(name="jp.empressia.app.empressia_oidc.service.UserService.TokenReissueInterval") int TokenReissueInterval
 	) {
 		this.UserAccessor = UserAccessor;
-		this.TokenReissueInterval = TokenReissueInterval;
 	}
 
 	@Transactional
@@ -44,7 +44,7 @@ public class UserService {
 	 * 重複しないトークンを発行して登録します。
 	 * 引数のIDに発行したトークンを設定して登録したトークンを返します。
 	 */
-	@Transactional 
+	@Transactional
 	public Token register(Token token) {
 		UserAuthentication authentication = token.getUserAuthentication();
 		UserAuthorization authorization = token.getUserAuthorization();
@@ -70,6 +70,11 @@ public class UserService {
 			token.setID(ID);
 			try {
 				this.UserAccessor.register(token);
+				// 一定量以上は許可しない。
+				List<Token> tokens = this.UserAccessor.queryTokens(token.getUser());
+				for(Token oldToken : tokens.stream().skip(this.MaxTokenCount).collect(Collectors.toList())) {
+					this.remove(oldToken.getID());
+				}
 				break;
 			} catch(Exception ex) {
 				++c;
@@ -81,7 +86,7 @@ public class UserService {
 		return token;
 	}
 
-	@Transactional 
+	@Transactional
 	public void remove(String id) {
 		Token token = this.UserAccessor.findTokenWithFetchAll(id);
 		if(token != null) {
@@ -98,65 +103,38 @@ public class UserService {
 	}
 
 	/**
-	 * トークンを登録、ないしは更新します。
+	 * トークンに対応する認証と認可を更新します。
 	 * 古い認証と認可は、新しいものが指定された場合は、削除されます。
 	 * userは、更新時にはnullにできます。
 	 */
 	@Transactional
-	public void mergeTokenWith(String ID, String scope, LocalDateTime createdAt, User user, UserAuthentication authentication, UserAuthorization authorization) {
+	public void mergeTokenWith(String ID, String scope, LocalDateTime createdAt, UserAuthentication authentication, UserAuthorization authorization) {
 		Token oldToken = this.UserAccessor.findTokenWithFetchAll(ID);
-		UserAuthentication oldAuthentication = (oldToken != null) ? oldToken.getUserAuthentication() : null;
-		UserAuthorization oldAuthorization = (oldToken != null) ? oldToken.getUserAuthorization() : null;
+		if(oldToken == null) { throw new IllegalStateException("トークンの認証と認可を更新しようとしましたが、元のトークンがありませんでした。"); }
 		if(authentication != null) {
-			authentication.setUser((oldToken != null) ? oldToken.getUser() : user);
-			this.UserAccessor.register(authentication);
-		}
-		if(authorization != null) {
-			authorization.setUser((oldToken != null) ? oldToken.getUser() : user);
-			this.UserAccessor.register(authorization);
-		}
-		Token resultToken;
-		boolean generateNewToken;
-		if(oldToken == null) {
-			resultToken = new Token();
-			resultToken.setUser(user);
-			if(scope == null) { throw new IllegalStateException("新規のトークンいscope指定がありません。"); }
-			if(scope != null) { resultToken.setScope(scope); }
-			{
-				resultToken.setCreatedAt(createdAt);
-				generateNewToken = true;
-			}
-		} else {
-			resultToken = oldToken;
-			if((user != null) && (oldToken.getUser().equals(user) == false)) {
-				throw new IllegalStateException("指定されたユーザーが不整合を起こしています。");
-			}
-			if(scope != null) { resultToken.setScope(scope); }
-			// トークンの期限が切れていたら、新しくする。
-			if(oldToken.getCreatedAt().plusSeconds(this.TokenReissueInterval).isBefore(createdAt)) {
-				resultToken.setCreatedAt(createdAt);
-				generateNewToken = true;
+			UserAuthentication oldAuthentication = oldToken.getUserAuthentication();
+			authentication.setUser(oldToken.getUser());
+			if(authentication.equals(oldAuthentication)) {
+				oldAuthentication.merge(authentication);
 			} else {
-				generateNewToken = false;
-			}
-		}
-		if(authentication != null) { resultToken.setUserAuthentication(authentication); }
-		if(authorization != null) { resultToken.setUserAuthorization(authorization); }
-		// 更新系はすでに管理下にあるからそのままで反映されるはず。
-		if(generateNewToken) {
-			this.registerInternal(resultToken);
-		}
-		if((oldToken != null) && (generateNewToken)) {
-			this.remove(ID);
-		}
-		if(authentication != null) {
-			if(oldAuthentication != null) {
-				this.UserAccessor.remove(oldAuthentication);
+				this.UserAccessor.register(authentication);
+				oldToken.setUserAuthentication(authentication);
+				if(oldAuthentication != null) {
+					this.UserAccessor.remove(oldAuthentication);
+				}
 			}
 		}
 		if(authorization != null) {
-			if(oldAuthorization != null) {
-				this.UserAccessor.remove(oldAuthorization);
+			UserAuthorization oldAuthorization = oldToken.getUserAuthorization();
+			authorization.setUser(oldToken.getUser());
+			if(authorization.equals(oldAuthorization)) {
+				oldAuthorization.merge(authorization);
+			} else {
+				this.UserAccessor.register(authorization);
+				oldToken.setUserAuthorization(authorization);
+				if(oldAuthorization != null) {
+					this.UserAccessor.remove(oldAuthorization);
+				}
 			}
 		}
 	}

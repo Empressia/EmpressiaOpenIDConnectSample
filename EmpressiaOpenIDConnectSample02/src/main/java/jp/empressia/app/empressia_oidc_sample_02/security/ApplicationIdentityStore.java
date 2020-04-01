@@ -112,7 +112,7 @@ public class ApplicationIdentityStore extends OpenIDConnectIdentityStore {
 
 	/**
 	 * 指定されたtokenを更新します。
-	 * @param credential リフレッシュされた新しい認証認可情報。IDトークンは亡い可能性がある店に注意する。
+	 * @param credential リフレッシュされた新しい認証認可情報。IDトークンはない可能性がある点に注意する。
 	 */
 	@Override
 	protected void updateToken(String token, OpenIDConnectCredential credential) {
@@ -145,7 +145,7 @@ public class ApplicationIdentityStore extends OpenIDConnectIdentityStore {
 		authorization.setRefreshToken(refresh_token);
 		authorization.setExpiresIn(expires_in);
 		authorization.setCreatedAt(createdAt);
-		this.UserService.mergeTokenWith(token, scope, createdAt, null, authentication, authorization);
+		this.UserService.mergeTokenWith(token, scope, createdAt, authentication, authorization);
 	}
 
 	/**

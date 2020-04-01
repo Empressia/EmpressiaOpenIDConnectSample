@@ -145,4 +145,12 @@ public class UserAuthentication implements Serializable {
 
 	}
 
+	/** 引数の主キー以外を適用します。 */
+	public void merge(UserAuthentication other) {
+		this.ExpirationTime = other.ExpirationTime;
+		this.IssuedAt = other.IssuedAt;
+		this.MailAddress = other.MailAddress;
+		this.Name = other.Name;
+	}
+
 }
