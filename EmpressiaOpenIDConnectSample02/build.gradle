@@ -14,7 +14,7 @@ dependencies {
 	// launch.jsonのmainClassに指定するには、runtimeClasspathに入らないと怒られてしまう。
 	providedRuntime(group:"fish.payara.extras", name:"payara-micro", version:"5.194");
 	// use Empressia OpenID Connect.
-	implementation(group:"jp.empressia", name:"jp.empressia.enterprise.security.oidc", version:"1.0.1");
+	implementation(group:"jp.empressia", name:"jp.empressia.enterprise.security.oidc", version:"1.0.6");
 	// use CDI.
 	providedCompile(group:"javax.enterprise", name:"cdi-api", version:"2.0.SP1");
 	// use Java EE Security API.

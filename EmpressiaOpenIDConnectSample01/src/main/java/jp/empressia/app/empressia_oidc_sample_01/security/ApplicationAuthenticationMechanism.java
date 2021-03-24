@@ -20,7 +20,7 @@ public class ApplicationAuthenticationMechanism extends MicrosoftAuthenticationM
 	 */
 	@Inject
 	public ApplicationAuthenticationMechanism(Settings settings, IdentityStoreHandler IdentityStoreHandler, PublicKeyHelper PublicKeyHelper) {
-		super(settings, IdentityStoreHandler, PublicKeyHelper);
+		super(settings, IdentityStoreHandler, null, PublicKeyHelper);
 	}
 
 }

@@ -46,7 +46,7 @@ public class ApplicationAuthenticationMechanism extends MultipleIssuersOpenIDCon
 			this.LINESettings = LINESettings;
 			this.MicrosoftSettings = MicrosoftSettings;
 			this.Mechanisms = Set.<IOpenIDConnectAuthenticationMechanism>of(
-				new GoogleAuthenticationMechanism(this.GoogleSettings, IdentityStoreHandler, PublicKeyHelper) {
+				new GoogleAuthenticationMechanism(this.GoogleSettings, IdentityStoreHandler, null, PublicKeyHelper) {
 					@Override
 					protected LinkedHashMap<String, String> handleAuthorizationRequestParameters(LinkedHashMap<String, String> parameters) {
 						parameters.put("access_type", "offline");
@@ -54,8 +54,8 @@ public class ApplicationAuthenticationMechanism extends MultipleIssuersOpenIDCon
 						return parameters;
 					}
 				},
-				new LINEAuthenticationMechanism(this.LINESettings, IdentityStoreHandler),
-				new MicrosoftAuthenticationMechanism(this.MicrosoftSettings, IdentityStoreHandler, PublicKeyHelper)
+				new LINEAuthenticationMechanism(this.LINESettings, IdentityStoreHandler, null),
+				new MicrosoftAuthenticationMechanism(this.MicrosoftSettings, IdentityStoreHandler, null, PublicKeyHelper)
 			);
 		}
 
