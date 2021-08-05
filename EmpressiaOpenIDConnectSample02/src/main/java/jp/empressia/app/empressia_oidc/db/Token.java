@@ -18,7 +18,6 @@ import javax.persistence.OneToOne;
  */
 @Entity
 @IdClass(Token.PK.class)
-@SuppressWarnings("serial")
 public class Token implements Serializable {
 
 	/** ID。 */

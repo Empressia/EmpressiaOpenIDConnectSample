@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @IdClass(UserAuthentication.PK.class)
-@SuppressWarnings("serial")
 public class UserAuthentication implements Serializable {
 
 	/** Issuer。 */

@@ -13,7 +13,6 @@ import javax.persistence.IdClass;
  */
 @Entity
 @IdClass(User.PK.class)
-@SuppressWarnings("serial")
 public class User implements Serializable {
 
 	/** Issuer。 */

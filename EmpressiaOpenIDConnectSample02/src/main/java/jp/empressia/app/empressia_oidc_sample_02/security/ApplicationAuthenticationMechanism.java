@@ -70,7 +70,7 @@ public class ApplicationAuthenticationMechanism extends MultipleIssuersOpenIDCon
 	 * コンストラクタ。
 	 */
 	@Inject
-	public ApplicationAuthenticationMechanism(Settings settings, OpenIDConnectAuthenticationMechanismSupplier MechanismSupplier, OpenIDConnectAuthenticationMechanismSelectable MechanismSelector, IssuerNotSelectedHandler IssuerNotSelectedHandler, IOpenIDConnectIdentityStore IdentityStore) {
+	public ApplicationAuthenticationMechanism(Settings settings, OpenIDConnectAuthenticationMechanismSupplier MechanismSupplier, OpenIDConnectAuthenticationMechanismSelectable MechanismSelector, MechanismNotSelectedHandler IssuerNotSelectedHandler, IOpenIDConnectIdentityStore IdentityStore) {
 		super(settings, MechanismSupplier, MechanismSelector, IssuerNotSelectedHandler, IdentityStore);
 	}
 

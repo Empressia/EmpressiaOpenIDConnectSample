@@ -9,7 +9,15 @@
 			"presentation": {
 				"reveal": "silent"
 			},
-			"command": "./gradlew copyRuntime copyLibraries createArgfile"
+			"command": "./gradlew copySyncLibraries"
+		},
+		{
+			"label": "CopyRuntime",
+			"type": "shell",
+			"presentation": {
+				"reveal": "silent"
+			},
+			"command": "./gradlew copySyncRuntime"
 		},
 		{
 			"label": "CopyWebappToApplication",
@@ -50,7 +58,7 @@
 			"presentation": {
 				"reveal": "silent"
 			},
-			"dependsOn": ["CopyWebappToApplication", "CopyWEB-INFToApplication", "CopyBinToApplication", "CopyLibrariesToApplication"],
+			"dependsOn": ["CopyWebappToApplication", "CopyWEB-INFToApplication", "CopyBinToApplication", "CopyLibrariesToApplication", "CopyRuntime"],
 		},
 		{
 			"label": "ReloadApplication",

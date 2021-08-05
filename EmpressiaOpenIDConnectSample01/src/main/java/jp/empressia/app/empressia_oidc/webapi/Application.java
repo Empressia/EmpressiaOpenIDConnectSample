@@ -2,6 +2,7 @@ package jp.empressia.app.empressia_oidc.webapi;
 
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 /**
  * @author すふぃあ
  */
+@ApplicationScoped
 @ApplicationPath("api")
 public class Application extends javax.ws.rs.core.Application {
 

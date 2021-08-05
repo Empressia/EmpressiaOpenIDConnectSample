@@ -5,7 +5,6 @@ import org.eclipse.persistence.platform.database.DatabasePlatform;
 /**
  * @author すふぃあ
  */
-@SuppressWarnings("serial")
 public class SQLitePlatform extends DatabasePlatform {
 
 	@Override
